@@ -36,47 +36,81 @@ uint8_t **InicializarTablero(int ancho, int alto){
     }
 
     // Devolvemos el tablero completlo con ceros en cada posicion para ser usado mas adelante por la capa
-    // de frontend.
+    // de backend.
     return NuevoTablero;
 }
 
 
 void ImprimirTablero(uint8_t **tablero, int ancho, int alto, uint16_t mascara_actual, int PosX, int PosY){
-    int BytesPorFila = 0, bit_pieza = 0;
+    /*
+    Recibe: El tablero directamnete desde el backend para procesarlo y dejarlo listo para imprimir.
+    Tambien recibe el ancho y alto, para definir las dimensiones. y recibe parametros usados para usar
+    los movimientos de la mascara y la posicion de la pieza.
+    Hace: Recorre cada celda del tablero y dibuja la pieza sobre los espacios vacios o muestar los espacios
+    vacios y adicionamete el fondo congelado
+    Retorna: Retorna el tablero recorrido completo imprimiendo la ocupacion de cada celda, al no hacer ninguna
+    modificacion a las estructuras de destos esta funcion pertenece al frontend.
+    */
 
+    // Inicializacion de variables usadas
+    int BytesPorFila = 0;
+
+    // Calcula cuántos bytes caben en una fila: cada byte representa 8 columnas.
     BytesPorFila = ancho / 8;
 
-    cout << "\n--- TABLERO ACTUAL ---" << endl;
+    //Titulo para inicio del tablero
+    cout << "\n---- TABLERO ACTUAL ----" << endl;
 
-    // For para las columnas (de arriba hacia abajo)
+    // For para recorrer las columnas (de arriba hacia abajo)
     for(int i = 0; i < alto; i++){
-        // For para las filas en bytes (de izquierda a derecha)
+
+        // Itera sobre cada bytes de la fila actual (de izquierda a derecha)
         for(int j = 0; j < BytesPorFila; j++){
 
+            // Recorrido por bits dentro de cada bytes desde el mas siginicativo al menos significativo
             for (int bit = 7; bit >= 0; bit--){
-                int X_tablero = (j*8) + (7-bit);
-                int ValorBit = (tablero [i][j] >> bit) & 1;
-                int DibujarPieza = 0; // Para dibujar la pieza en la pantalla
 
+                // Se calcula la columna global desde 0 hasta ancho - 1.
+                int X_tablero = (j*8) + (7-bit);
+
+                // Se extrae el bit correpondiente del fondo y se desplaza el byte a la derecha bit
+                //posiciones y se obtiene 1 o 0.
+                int ValorBit = (tablero [i][j] >> bit) & 1;
+
+                // Se inicializa esta variable encargada de dibujar (sobreescribiendo lo que haya en el fondo).
+                int DibujarPieza = 0;
+
+                // Verifica si la celda actual "cae" dentro del espacio 4x4 bits de la pieza.
+                // Si no cae no hace nada (No tiene movimiento hacia abajo de castigo).
                 if ((X_tablero >= PosX) && (X_tablero < PosX + 4) && (i >= PosY) && i < (PosY + 4)){
 
+                    // Convierte de las coordenadas globales a reativas dentro de la matriz 4x4 bits
+                    // de la pieza.
                     int Fila_pieza = i - PosY;
                     int Columna_pieza = X_tablero - PosX;
 
+                    // Verificacion adicional de que pieza esta dentro de las filas correspondientes.
                     if(Fila_pieza >= 0 && Fila_pieza < 4) {
+
+                        //Se calcula la posicion del bit dentro de la mascara.
                         int bit_pieza = 15 - (Fila_pieza * 4 + Columna_pieza);
+
+                        //Se extare el bit de la pieza.
                         DibujarPieza = (mascara_actual >> bit_pieza) & 1;
                     }
                 }
 
+                // Usamos '@' para diferenciar la pieza que cae del fondo '#'.
                 if (DibujarPieza == 1) {
-                    cout << "@ "; // Usamos '@' para diferenciar la pieza que cae del fondo '#'
+                    cout << "@ ";
                 }
+                // Bloque de fondo congelado.
                 else if (ValorBit == 1) {
-                    cout << "# "; // Bloque de fondo congelado
+                    cout << "# ";
                 }
+                // Espacio vacío
                 else {
-                    cout << ". "; // Espacio vacío
+                    cout << ". ";
                 }
             }
         }
