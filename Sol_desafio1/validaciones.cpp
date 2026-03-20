@@ -27,6 +27,15 @@ void VerificarDimensiones(int *ptr_ancho, int *ptr_alto){
     cout << "El tablero se creara con: " << *ptr_ancho << " de ancho y " << *ptr_alto << " de alto." << endl;
 }
 
+char CapturarAccion(){
+    char tecla_ingresada;
+
+    cout << "\nAccion (A=Izq, D=Der, S=Bajar, W=Rotar, Q=Salir): ";
+    cin >> tecla_ingresada;
+
+    return tecla_ingresada;
+}
+
 void VerificarPiezas(){
 
 }

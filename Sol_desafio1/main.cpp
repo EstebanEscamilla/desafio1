@@ -1,16 +1,17 @@
 #include <iostream>
 #include <cstdint> // Esta es para los unitx_t
 #include <ctime> // Para generar la semilla (Número aleatorio)
-
 #include "validaciones.h" // Modulo para validar entradas
 #include "piezas.h" // Modulo para generar piezas y sus máscaras
+#include "tablero.h"
+#include "juego.h"
 
 using namespace std;
 
 int main(){
-    int ancho = 0, alto = 0, *ptr_ancho = NULL, *ptr_alto = NULL;
-    int pieza_actual = 0 , *dir_pieza_actual = NULL;
-    uint16_t mascara_actual = 0;
+    int ancho = 0, alto = 0, *ptr_ancho = NULL, *ptr_alto = NULL; // Dimensiones tablero
+    uint8_t **tablero_juego = NULL; // para el tablero
+
 
     srand(time(NULL)); // Para generar una semilla con los segundos del reloj de la hora actual
 
@@ -21,13 +22,18 @@ int main(){
 
     //Asignamos todos los punteros a sus variables correspondientes
     ptr_ancho = &ancho; ptr_alto = &alto;
-    dir_pieza_actual = &pieza_actual;
 
     // Verificamos que las dimensiones del tablero sean correctas
     VerificarDimensiones(ptr_ancho, ptr_alto);
 
-    // Ahora generamos nuestra pieza de forma aleatoria (en su posición natural)
-    mascara_actual = GenerarPiezaAleatoria(dir_pieza_actual);
+    // Generamos el tablero con las dimensiones requeridas (se le pide al heap)
+    tablero_juego = InicializarTablero(ancho, alto);
+
+    // Entramos al loop infinito
+    IniciarJuego(tablero_juego, ancho, alto);
+
+    // Liberamos la memoria al terminar el juego
+    LimpiarTablero(tablero_juego, alto);
 
     return 0;
 }

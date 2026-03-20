@@ -54,6 +54,7 @@ uint16_t Piezas_Guardadas[7][4] = {
      0b0000111010000000}
 };
 
+
 uint16_t GenerarPiezaAleatoria(int *dir_pieza_actual){
     /*
     Recibe: Un puntero que almacena la dirección de memoria de la variable donde se
@@ -69,4 +70,10 @@ uint16_t GenerarPiezaAleatoria(int *dir_pieza_actual){
     cout << *dir_pieza_actual;
 
     return Piezas_Guardadas[*dir_pieza_actual][0];
+}
+
+
+uint16_t ObtenerMascara(int id_pieza, int rotacion){
+    // Retorna la máscara de la pieza pedida en la rotación pedida (0, 1, 2 o 3)
+    return Piezas_Guardadas[id_pieza][rotacion];
 }
