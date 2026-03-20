@@ -5,29 +5,38 @@ using namespace std;
 
 uint8_t **InicializarTablero(int ancho, int alto){
     /*
-    Recibe: Recibe el ancho y el alto dados por el usuario
+    Recibe: Recibe el ancho y el alto dados por el usuario los cuales son previamente validado
+    en validaciones.
     Hace: Contruye un apuntador a apuntador que a su vez tiene dentro de sí 8 bits (uint8_t)
-          y se recorre cada byte y se limpia la memoria y se ponen puros ceros
-    Retorna: retorna el tablero con las dimensionens pedidas y limpio
+          y se recorre cada byte para limpiar la "basura" a la que inicialnnete apunta y la reemplaza con
+          ceros logicos "0".
+    Retorna: retorna el tablero con las dimensionens pedidas (n*8) relleno de ceros.
     */
+
+    // Inicializacion de "BytesPorFila", alto de la matriz.
     int BytesPorFila = 0;
+
+    //Inicializacion del puntero a punteros donde alojaremos la matriz que representara el tablero.
     uint8_t **NuevoTablero = NULL;
 
+    // Calcula cuántos bytes caben en una fila: cada byte representa 8 columnas.
     BytesPorFila = ancho / 8;
 
-    // Pedimos memoria (al heap) suficiente para el número de filas (alto)
+    // Pedimos memoria (al heap) suficiente para el número de filas (alto).
     NuevoTablero = new uint8_t *[alto];
 
     // Ahora pasamos por cada fila pidiendo espacio para las columnas y así formar la matriz
     for(int i = 0; i < alto; i++){
         NuevoTablero[i] = new uint8_t [BytesPorFila];
 
-        // Poner todo en cero (vacío y disponible)
+        // Pasamos recorriendo cada columna y poniendo ceros, de esta manera "limpiamos" la matriz
         for(int j = 0; j < BytesPorFila; j++){
             NuevoTablero[i][j] = 0;
         }
     }
 
+    // Devolvemos el tablero completlo con ceros en cada posicion para ser usado mas adelante por la capa
+    // de frontend.
     return NuevoTablero;
 }
 
