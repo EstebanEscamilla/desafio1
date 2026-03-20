@@ -122,6 +122,13 @@ void ImprimirTablero(uint8_t **tablero, int ancho, int alto, uint16_t mascara_ac
 
 
 void LimpiarTablero(uint8_t **tablero, int alto){
+
+    /*
+    Recibe: El tablero puntero doble que apunta a las filas. El alto numero de filas del tablero.
+    Hace:  libera el arreglo de bytes de cada fila, y finalmente libera el arreglo de punteros a filas.
+    Retorna: Limpieza de la memoria dinamica.
+    */
+
     for(int i = 0; i < alto; i++){
         delete[] tablero[i];
     }
