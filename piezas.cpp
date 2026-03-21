@@ -9,7 +9,7 @@ using namespace std;
     Hace: Se guarda la pieza bajo esta estructura las mascaras rotadas y sin rotación. Cada 4 bits representan
     cada fila y la concatenacion es la siguiente rotacion.
     */
-uint16_t Piezas_Guardadas[7][4] = uint16_t Piezas_Guardadas[7][4] = {
+uint16_t Piezas_Guardadas[7][4] = {
     /*
     Hace: Se guarda la pieza bajo esta estructura las mascaras rotadas y sin rotación. Cada 4 bits representan
     cada fila y la concatenacion es la siguiente rotacion.
