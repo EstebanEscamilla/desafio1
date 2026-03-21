@@ -179,27 +179,45 @@ void IniciarJuego(uint8_t **tablero, int ancho, int alto){
 
 int HayColision(uint8_t **tablero, int ancho, int alto, uint16_t mascara, int NuevaPosX, int NuevaPosY) {
 
+    /*
+    Recibe: Tablero, ancho, alto mascara, nuevas posicion de la pieza.
+    Hace:Recorre los bits activos de la pieza y verifica contra los bordes y bloques fijos del tablero.
+    Retorna: 1 si hay colision o 0 en caso contrario.
+    */
+
+    //Recorre las 4 filas y columnas de la pieza.
     for (int fila = 0; fila < 4; fila++) {
         for (int col = 0; col < 4; col++) {
 
+            //Convertir coordenadas de la pieza (fila, columna ) en bit en mascara.
             int bit_pieza = 15 - (fila * 4 + col);
+            //Se obtiene el bit de la pieza.
             int valorPieza = (mascara >> bit_pieza) & 1;
 
+            //Bit en 1 significa celda ocupada
             if (valorPieza == 1) {
 
+                //Se calculan coordenadas absolutas en el tablero.
                 int absX = NuevaPosX + col;
                 int absY = NuevaPosY + fila;
 
+                //Se verifica si esta afuera de los limites. No se verifica por arriba
+                //Ya que puede estar fuera de las dimensiones sin haber colision.
                 if (absX < 0 || absX >= ancho || absY >= alto) {
                     return 1; //
                 }
 
+                // Verifica el bit correspondiente en el tablero
                 if (absY >= 0) {
+                    //byte dentro de la fila
                     int ByteActual = absX / 8;
+                    //mapea la columna al bit dentro del byte
                     int BitActual = 7 - (absX % 8);
 
+                    // Estrae el bit del fondo.
                     int valorFondo = (tablero[absY][ByteActual] >> BitActual) & 1;
 
+                    // Si es 1 valor del fondo entonces hay colision.
                     if (valorFondo == 1) {
                         return 1;
                     }
@@ -207,6 +225,7 @@ int HayColision(uint8_t **tablero, int ancho, int alto, uint16_t mascara, int Nu
             }
         }
     }
+    //1 si hay colisión, 0 si no.
     return 0;
 }
 
