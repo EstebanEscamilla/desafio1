@@ -232,20 +232,31 @@ int HayColision(uint8_t **tablero, int ancho, int alto, uint16_t mascara, int Nu
 
 void FundirPieza(uint8_t **tablero, uint16_t mascara, int PosX, int PosY) {
 
+
+
+    // Recorre las 4x4 celdas de la pieza
     for (int fila = 0; fila < 4; fila++) {
         for (int col = 0; col < 4; col++) {
 
+            //Se calcula igual que en hay colision.
+            //Convertir coordenadas de la pieza (fila, columna ) en bit en mascara.
+            //Ya que puede estar fuera de las dimensiones sin haber colision.
             int bit_pieza = 15 - (fila * 4 + col);
             int valorPieza = (mascara >> bit_pieza) & 1;
 
+            //Si el bit activo calcula las coordenadas absolutas
             if (valorPieza == 1) {
                 int absX = PosX + col;
                 int absY = PosY + fila;
 
+                // solo se escribe si se cumple la condicion, no escribe si la pieza está por
+                //encima del tablero, lo que evita escribir fuera de la memoria
                 if (absY >= 0) {
                     int ByteActual = absX / 8;
                     int BitActual = 7 - (absX % 8);
 
+                    //establece el bit correspondiente a 1 usando OR. Así se añade
+                    //el bloque al fondo sin modificar otros bits.
                     tablero[absY][ByteActual] |= (1 << BitActual);
                 }
             }
